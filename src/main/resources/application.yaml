@@ -22,3 +22,6 @@ spring:
     multipart:
       maxFileSize: 10MB
       maxRequestSize: 10MB
+
+  profiles:
+    include: api-key

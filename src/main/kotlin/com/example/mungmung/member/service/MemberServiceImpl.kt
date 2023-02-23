@@ -5,6 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -17,6 +18,11 @@ import org.springframework.web.client.RestTemplate
 @Slf4j
 @Service
 class MemberServiceImpl: MemberService  {
+    @Value("\${naver-client-id}")
+    lateinit var naverClientId : String
+
+    @Value("\${naver-client-secret}")
+    lateinit var naverClientSecret : String
 
     @Autowired
     val memberRepository: MemberRepository? = null
@@ -40,9 +46,9 @@ class MemberServiceImpl: MemberService  {
         val headers = org.springframework.http.HttpHeaders()
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
         val params: MultiValueMap<String, String> = LinkedMultiValueMap()
-        params.add("grant_type", "")
-        params.add("client_id", "") // 클라이언트 ID
-        params.add("client_secret", "yvJMoXP8eC")// 클라이언트 시크릿~
+        params.add("grant_type", "authorization_code")
+        params.add("client_id", naverClientId) // 클라이언트 ID
+        params.add("client_secret", naverClientSecret)// 클라이언트 시크릿~
         params.add("code", code)
         params.add("state", state)
         return HttpEntity(params, headers)
