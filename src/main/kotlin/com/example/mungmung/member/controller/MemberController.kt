@@ -19,8 +19,6 @@ import org.springframework.web.client.RestTemplate
 @CrossOrigin(origins = ["*"], allowedHeaders = ["*"])
 public class UserController {
 
-
-
     @GetMapping("/naver-login")
     open fun AuthNaver(@RequestParam code: String?, @RequestParam state: String?): String? {
 
@@ -28,7 +26,14 @@ public class UserController {
         val accessElement: JsonElement = parser.parse(requestAccessToken(generateAuthCodeRequest(code!!, state!!)!!)!!.body)
 
         val accessToken: String = accessElement.asJsonObject.get("access_token").asString
-        return requestProfile(generateProfileRequest(accessToken)!!)!!.body
+        val userInfo : String? = requestProfile(generateProfileRequest(accessToken)!!)!!.body
+
+        val userInfoToJson : JsonElement = parser.parse(userInfo)
+        System.out.println(userInfoToJson.asJsonObject.get("response").asJsonObject.get("id").asString)
+        System.out.println(userInfoToJson.asJsonObject.get("response").asJsonObject.get("email").asString)
+        System.out.println(userInfoToJson.asJsonObject.get("response").asJsonObject.get("name").asString)
+
+        return userInfo
     }
 
     private fun generateAuthCodeRequest(code: String, state: String): HttpEntity<MultiValueMap<String, String>>? {
