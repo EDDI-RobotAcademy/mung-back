@@ -1,6 +1,11 @@
 package com.example.mungmung.member.service
 
+import com.example.mungmung.member.SignUpRequest
+import com.example.mungmung.member.entity.Member
 import com.example.mungmung.member.repository.MemberRepository
+import com.example.mungmung.security.entity.Authentication
+import com.example.mungmung.security.entity.BasicAuthentication
+import com.example.mungmung.security.repository.AuthenticationRepository
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import lombok.extern.slf4j.Slf4j
@@ -26,6 +31,9 @@ class MemberServiceImpl: MemberService  {
 
     @Autowired
     val memberRepository: MemberRepository? = null
+
+    @Autowired
+    val authenticationRepository: AuthenticationRepository? = null
 
     override fun authenticationNaver(code: String?, state: String?): String?{
         val parser = JsonParser()
@@ -79,6 +87,16 @@ class MemberServiceImpl: MemberService  {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
         return HttpEntity(headers)
     }
+    override fun signUp(signUpRequest: SignUpRequest): Boolean{
+        val member: Member = signUpRequest.toMember()
 
+        memberRepository!!.save(member)
 
+        val auth = BasicAuthentication(member,
+                Authentication.BASIC_AUTH, signUpRequest.password)
+
+        authenticationRepository!!.save(auth)
+
+        return true
+    }
 }
