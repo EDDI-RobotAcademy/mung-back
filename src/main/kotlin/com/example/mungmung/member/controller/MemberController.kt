@@ -1,6 +1,6 @@
 package com.example.mungmung.member.controller
 
-import com.example.mungmung.member.SignUpRequest
+import com.example.mungmung.member.request.SignUpRequest
 import com.example.mungmung.member.service.MemberService
 
 import lombok.extern.slf4j.Slf4j
@@ -26,16 +26,26 @@ class UserController {
 
     @PostMapping("/sign-up")
     fun signUp(@RequestBody request: SignUpRequest): Boolean {
-       println("signUp: ${request}")
+       println("signUp: $request")
         return service!!.signUp(request)
     }
 
     @GetMapping("/check-email/{email}")
-    fun emailValidation(@PathVariable("email") email: String): Boolean? {
+    fun emailValidation(@PathVariable("email") email: String): Boolean {
         println("emailValidation(): $email")
 
         val result = service!!.emailValidation(email)
         println("email result: $result")
+
+        return result
+    }
+
+    @GetMapping("/check-nickname/{nickname}")
+    fun nicknameValidation(@PathVariable("nickname") nickname: String): Boolean {
+        println("nicknameValidation(): $nickname")
+
+        val result = service!!.nicknameValidation(nickname)
+        println("nickname result: $result")
 
         return result
     }

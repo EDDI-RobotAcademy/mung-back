@@ -30,7 +30,7 @@ class Member() {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE])
     private val authentications: Set<Authentication> = HashSet<Authentication>()
 
-    constructor(email: String, nickname: String, memberType: String) : this() {
+    constructor(email: String?, nickname: String?, memberType: String?) : this() {
         this.email = email
         this.nickname = nickname
         when(memberType) {
