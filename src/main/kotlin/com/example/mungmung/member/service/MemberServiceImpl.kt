@@ -1,6 +1,6 @@
 package com.example.mungmung.member.service
 
-import com.example.mungmung.member.SignUpRequest
+import com.example.mungmung.member.request.SignUpRequest
 import com.example.mungmung.member.entity.Member
 import com.example.mungmung.member.repository.MemberRepository
 import com.example.mungmung.security.entity.Authentication
@@ -103,6 +103,12 @@ class MemberServiceImpl: MemberService  {
 
     override fun emailValidation(email: String): Boolean {
         val maybeMember: Optional<Member> = memberRepository!!.findByEmail(email)
+
+        return !maybeMember.isPresent
+    }
+
+    override fun nicknameValidation(nickname: String): Boolean {
+        val maybeMember: Optional<Member> = memberRepository!!.findByNickname(nickname)
 
         return !maybeMember.isPresent
     }
