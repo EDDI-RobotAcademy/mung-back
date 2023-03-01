@@ -8,6 +8,7 @@ import com.example.mungmung.mungWiki.repository.WikiDocumentRepository
 import com.example.mungmung.mungWiki.request.RegisterRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class MungWikiServiceImpl:MungWikiService {
@@ -23,17 +24,23 @@ class MungWikiServiceImpl:MungWikiService {
 
     override fun registerWiki(request: RegisterRequest) : String{
         return try {
-            val dogStatus = request.toDogStatue()
-            val wikiDocument = request.toWikiDocument()
-
-            dogStatusRepository.save(dogStatus)
-            wikiDocumentRepository.save(wikiDocument)
-
             var dogType : DogType? = DogType.valueOfDogType(request.dogType)
-            val mungWiki = MungWiki(dogType,request.dogImgName,wikiDocument ,dogStatus)
-            mungWikiRepository.save(mungWiki)
+            var maybeMungWiki : Optional<MungWiki?>? = mungWikiRepository.findByDogType(dogType)
 
-            "새로운 위키 등록 성공!"
+            if(maybeMungWiki!!.isPresent){
+                "이미 등록된 강아지 종입니다"
+            }else{
+
+                val dogStatus = request.toDogStatue()
+                val wikiDocument = request.toWikiDocument()
+                dogStatusRepository.save(dogStatus)
+                wikiDocumentRepository.save(wikiDocument)
+
+                val mungWiki = MungWiki(dogType,request.dogImgName,wikiDocument ,dogStatus)
+                mungWikiRepository.save(mungWiki)
+
+                "새로운 위키 등록 성공!"
+            }
         }catch (e :Exception){
             e.toString()
         }
