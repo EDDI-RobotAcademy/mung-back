@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 @Service
 interface MungWikiService {
 
-    fun registerWiki(request: RegisterRequest)
+    fun registerWiki(request: RegisterRequest) : String
 
 
 }
