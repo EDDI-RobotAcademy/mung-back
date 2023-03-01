@@ -1,17 +1,11 @@
 package com.example.mungmung.member.controller
 
+import com.example.mungmung.member.SignUpRequest
 import com.example.mungmung.member.service.MemberService
 
 import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.ResponseEntity
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.client.RestTemplate
 
 
 @Slf4j
@@ -29,6 +23,14 @@ class UserController {
 
         return service!!.authenticationNaver(code, state)
     }
+
+    @PostMapping("/sign-up")
+    fun signUp(@RequestBody request: SignUpRequest): Boolean {
+       println("signUp: $request")
+        return service!!.signUp(request)
+    }
+
+
 
 
 

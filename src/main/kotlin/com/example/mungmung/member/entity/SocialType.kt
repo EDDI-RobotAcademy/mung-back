@@ -3,8 +3,9 @@ package com.example.mungmung.member.entity
 import lombok.Getter
 
 @Getter
-enum class SocialType {
+enum class SocialType(val type: String) {
 
-    NAVER(),
-    KAKAO()
+    NAVER("naver"),
+    KAKAO("kakao"),
+    LOCAL("local")
 }
