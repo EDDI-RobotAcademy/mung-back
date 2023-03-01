@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
+import java.util.*
 
 @Slf4j
 @Service
@@ -98,5 +99,11 @@ class MemberServiceImpl: MemberService  {
         authenticationRepository!!.save(auth)
 
         return true
+    }
+
+    override fun emailValidation(email: String): Boolean {
+        val maybeMember: Optional<Member> = memberRepository!!.findByEmail(email)
+
+        return !maybeMember.isPresent
     }
 }
