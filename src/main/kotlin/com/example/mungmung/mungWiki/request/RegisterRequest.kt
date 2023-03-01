@@ -12,13 +12,9 @@ import lombok.ToString
 @ToString
 @RequiredArgsConstructor
 class RegisterRequest {
-    var dogType: DogType? = null
+    var dogType: String? = null
 
     var dogImgName: String? = null
-
-    var wikiDocument: WikiDocument? = null
-
-    var dogStatus: DogStatus? = null
 
     var intelligenceLevel : Long? = null
 
@@ -34,14 +30,6 @@ class RegisterRequest {
 
     var documentation : String? = null
 
-    fun toMungWiki(): MungWiki? {
-        return MungWiki(
-            this.dogType,
-            this.dogImgName,
-            this.wikiDocument,
-            this.dogStatus,
-        )
-    }
 
     fun toDogStatue() : DogStatus?{
         return DogStatus(

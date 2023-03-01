@@ -29,12 +29,10 @@ class MungWiki() {
     @NotNull
     private var dogImgName : String? = null
 
-    @Column(nullable = false)
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     private var wikiDocument : WikiDocument? = null
 
-    @Column(nullable = false)
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     private var dogStatus : DogStatus? = null
