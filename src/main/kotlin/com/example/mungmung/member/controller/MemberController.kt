@@ -26,9 +26,21 @@ class UserController {
 
     @PostMapping("/sign-up")
     fun signUp(@RequestBody request: SignUpRequest): Boolean {
-       println("signUp: $request")
+       println("signUp: ${request}")
         return service!!.signUp(request)
     }
+
+    @GetMapping("/check-email/{email}")
+    fun emailValidation(@PathVariable("email") email: String): Boolean? {
+        println("emailValidation(): $email")
+
+        val result = service!!.emailValidation(email)
+        println("email result: $result")
+
+        return result
+    }
+
+
 
 
 

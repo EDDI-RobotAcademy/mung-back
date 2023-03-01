@@ -8,4 +8,6 @@ interface MemberService {
 
     fun signUp(signUpRequest: SignUpRequest): Boolean
 
+    fun emailValidation(email: String): Boolean
+
 }
