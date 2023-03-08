@@ -14,8 +14,6 @@ import lombok.ToString
 class RegisterRequest {
     var dogType: String? = null
 
-    var dogImgName: String? = null
-
     var intelligenceLevel : Long? = null
 
     var sheddingLevel : Long? = null
@@ -29,8 +27,6 @@ class RegisterRequest {
     var totalStatus : Long? = null
 
     var documentation : String? = null
-
-
     fun toDogStatue() : DogStatus?{
         return DogStatus(
             this.intelligenceLevel,
