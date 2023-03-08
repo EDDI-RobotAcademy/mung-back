@@ -5,13 +5,13 @@ import lombok.NoArgsConstructor
 import lombok.Setter
 import org.jetbrains.annotations.NotNull
 
+
 @Entity
 @NoArgsConstructor
 @Setter
 class MungWiki() {
-    constructor(dogType: DogType?, dogImgName: String?, wikiDocument: WikiDocument?, dogStatus: DogStatus?) : this(){
+    constructor(dogType: DogType?, wikiDocument: WikiDocument?, dogStatus: DogStatus?) : this(){
         this.dogType = dogType
-        this.dogImgName = dogImgName
         this.wikiDocument = wikiDocument
         this.dogStatus = dogStatus
     }
@@ -25,10 +25,6 @@ class MungWiki() {
     @NotNull
     private var dogType : DogType? = null
 
-    @Column(nullable = false)
-    @NotNull
-    private var dogImgName : String? = null
-
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     private var wikiDocument : WikiDocument? = null
@@ -37,4 +33,11 @@ class MungWiki() {
     @OneToOne(fetch = FetchType.LAZY)
     private var dogStatus : DogStatus? = null
 
+    @NotNull
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mungWiki")
+    private var wikiImages: List<WikiImages> = ArrayList()
+
+    fun setImages(wikiImages: List<WikiImages>){
+        this.wikiImages = wikiImages
+    }
 }
