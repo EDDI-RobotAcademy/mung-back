@@ -1,5 +1,6 @@
 package com.example.mungmung.member.controller
 
+import com.example.mungmung.member.request.SignInRequest
 import com.example.mungmung.member.request.SignUpRequest
 import com.example.mungmung.member.service.MemberService
 
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/member")
 @CrossOrigin(origins = ["*"], allowedHeaders = ["*"])
-class UserController {
+class MemberController {
 
     @Autowired
     val service: MemberService? = null
@@ -32,7 +33,7 @@ class UserController {
 
     @GetMapping("/check-email/{email}")
     fun emailValidation(@PathVariable("email") email: String): Boolean {
-        println("emailValidation(): $email")
+        println("emailValidation():$email")
 
         val result = service!!.emailValidation(email)
         println("email result: $result")
@@ -48,6 +49,13 @@ class UserController {
         println("nickname result: $result")
 
         return result
+    }
+
+    @PostMapping("/sign-in")
+    fun signIn(@RequestBody request: SignInRequest): String {
+        println("signIn: ${request.toString()}")
+
+        return service!!.signIn(request)
     }
 
 

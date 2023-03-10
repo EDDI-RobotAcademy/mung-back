@@ -1,13 +1,11 @@
 package com.example.mungmung.member.entity
 
 import com.example.mungmung.security.entity.Authentication
+import com.example.mungmung.security.entity.BasicAuthentication
 import jakarta.persistence.*
-import lombok.Getter
-import lombok.Setter
+import java.util.*
 
 @Entity
-@Setter
-@Getter
 class Member() {
 
     @Id
@@ -38,5 +36,25 @@ class Member() {
             MemberType.ADMIN.type -> this.memberType = MemberType.ADMIN
         }
         this.socialType = SocialType.LOCAL
+    }
+
+    fun getId(): Long? {
+        return id
+    }
+
+    private fun findBasicAuthentication(): Optional<Authentication> {
+        return authentications
+                .stream()
+                .filter { auth: Authentication? -> auth is BasicAuthentication }
+                .findFirst()
+    }
+
+    fun isRightPassword(plainToCheck: String): Boolean {
+        val maybeBasicAuth: Optional<Authentication> = findBasicAuthentication()
+        if (maybeBasicAuth.isPresent) {
+            val auth: BasicAuthentication = maybeBasicAuth.get() as BasicAuthentication
+            return auth.isRightPassword(plainToCheck)
+        }
+        return false
     }
 }
