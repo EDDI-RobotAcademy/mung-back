@@ -1,14 +1,16 @@
 package com.example.mungmung.member.service
 
-import com.example.mungmung.member.request.SignUpRequest
 import com.example.mungmung.member.entity.Member
 import com.example.mungmung.member.repository.MemberRepository
+import com.example.mungmung.member.request.SignInRequest
+import com.example.mungmung.member.request.SignInError
+import com.example.mungmung.member.request.SignUpRequest
 import com.example.mungmung.security.entity.Authentication
 import com.example.mungmung.security.entity.BasicAuthentication
 import com.example.mungmung.security.repository.AuthenticationRepository
+import com.example.mungmung.security.service.RedisService
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -21,7 +23,6 @@ import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
 import java.util.*
 
-@Slf4j
 @Service
 class MemberServiceImpl: MemberService  {
     @Value("\${naver-client-id}")
@@ -35,6 +36,9 @@ class MemberServiceImpl: MemberService  {
 
     @Autowired
     val authenticationRepository: AuthenticationRepository? = null
+
+    @Autowired
+    val redisService: RedisService? = null
 
     override fun authenticationNaver(code: String?, state: String?): String?{
         val parser = JsonParser()
@@ -111,5 +115,29 @@ class MemberServiceImpl: MemberService  {
         val maybeMember: Optional<Member> = memberRepository!!.findByNickname(nickname)
 
         return !maybeMember.isPresent
+    }
+
+    override fun signIn(signInRequest: SignInRequest): String {
+        val maybeMember: Optional<Member> = memberRepository!!.findByEmail(signInRequest.getEmail())
+
+        return if(maybeMember.isPresent) {
+
+            val member = maybeMember.get()
+
+            if( member.isRightPassword(signInRequest.getPassword()) ) {
+
+                val userToken = UUID.randomUUID()
+
+                redisService!!.deleteByKey(userToken.toString())
+                redisService!!.setKeyAndValue(userToken.toString(), member.getId()!!)
+
+                userToken.toString()
+
+            } else {
+                SignInError.WRONG_PASSWORD.toString()
+            }
+        } else {
+            SignInError.WRONG_EMAIL.toString()
+        }
     }
 }

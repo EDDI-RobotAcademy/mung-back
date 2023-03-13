@@ -1,5 +1,6 @@
 package com.example.mungmung.member.service
 
+import com.example.mungmung.member.request.SignInRequest
 import com.example.mungmung.member.request.SignUpRequest
 
 interface MemberService {
@@ -11,5 +12,7 @@ interface MemberService {
     fun emailValidation(email: String): Boolean
 
     fun nicknameValidation(nickname: String): Boolean
+
+    fun signIn(signInRequest: SignInRequest): String
 
 }

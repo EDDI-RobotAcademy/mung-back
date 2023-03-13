@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query
 import java.util.*
 
 interface MemberRepository : JpaRepository<Member,Long> {
-    @Query("select m from Member m where m.email = :email")
+    @Query("select m from Member m join fetch m.authentications where m.email = :email")
     fun findByEmail(email: String): Optional<Member>
 
     @Query("select m from Member m where m.nickname = :nickname")
